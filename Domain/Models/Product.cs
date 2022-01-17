@@ -42,7 +42,15 @@ namespace Domain.Models
                     .NotEmpty()
                     .WithMessage("Nome completo invalido")
                     .LessThan(p => DateTime.Now).WithMessage("a data deve estar no passado");
-            }
+                RuleFor(x => x.BarCode)
+                    .NotNull()
+                    .Length(3, 300)
+                    .WithMessage("BarCode invalido");
+                RuleFor(x => x.QuantityStock)
+                    .GreaterThanOrEqualTo(0)
+                    .WithMessage("Numero precisa ser maior ou igual a zero");
+                //RuleFor(x => x.)
+;            }
         }
     }
 }

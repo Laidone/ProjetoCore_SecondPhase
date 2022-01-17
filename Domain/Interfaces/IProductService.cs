@@ -8,8 +8,8 @@ namespace Domain.Interfaces
 {
     public interface IProductService
     {
-        Task<IEnumerable<Product>> ToList();
+       Task<IEnumerable<Product>> ToList();
 
-        Task AddProduct(Product product);
+       Task AddProduct(Product product);
     }
 }

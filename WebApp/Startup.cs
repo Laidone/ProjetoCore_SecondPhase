@@ -1,8 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +11,8 @@ using System.Threading.Tasks;
 using Infra.Repository;
 using Domain.Interfaces;
 using Infra.Data;
+using Domain.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebApp
 {
@@ -29,11 +28,16 @@ namespace WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews();
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<ProductContext>();
             services.AddDbContext<ProductContext>(x => x.UseSqlServer(Configuration.GetConnectionString("MinhaConnectionString")));
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ProductContext>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ProductContext>();
+            services.AddMvc();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,7 +46,6 @@ namespace WebApp
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
             else
             {

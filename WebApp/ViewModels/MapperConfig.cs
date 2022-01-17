@@ -8,6 +8,7 @@ namespace WebApp.ViewModels
         public MapperConfig()
         {
             CreateMap<Product, ProductViewModel>().ReverseMap();
+            CreateMap<Supplier, SupplierViewModel>().ReverseMap();
         }
     }
 }

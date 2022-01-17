@@ -9,30 +9,31 @@ namespace Domain.Services
 {
     public class ProductService : IProductService
     {
-        private readonly IRepositoryBase<Product> _produto;
-        /*private ModelStateDictionary _modelState;
-        public ProductService(IRepositoryBase<Product> produto)
+        //private readonly IRepositoryBase<Product> _produto;
+        private readonly IProductRepository _productRepository;
+        //private ModelStateDictionary _modelState;
+        public ProductService(IProductRepository produto)
         {
-            _produto = produto;
-        }
-        protected bool ValidateProduct(Product productToValidade)
-        {
-            if (productToValidade.Name.Trim() == 0)
-            {
-
-            }
-        }*/
-
-        Task IProductService.AddProduct(Product product)
-        {
-            //aqui... se exise no banco, todos campos est'ao preen... e etc...
-            throw new NotImplementedException();
+            _productRepository = produto;
         }
 
-        Task<IEnumerable<Product>> IProductService.ToList()
+        public async Task AddProduct(Product product)
         {
-            throw new NotImplementedException();
+            return;
         }
+
+        public async Task<IEnumerable<Product>> ToList()
+        {
+            return await _productRepository.ToList();
+        }
+        /*protected bool ValidateProduct(Product productToValidade)
+{
+   if (productToValidade.Name.Trim() == 0)
+   {
+
+   }
+}*/
+
 
     }
 }

@@ -3,6 +3,7 @@ using Domain.Models;
 using Infra.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -11,22 +12,33 @@ namespace Infra.Repository
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : Entity, IAggregateRoot
     {
-        private readonly ProductContext _cotext;
+        protected readonly ProductContext _context;
         protected readonly DbSet<T> _dbSet;
         public RepositoryBase(ProductContext context)
         {
-            _cotext = context;
-            _dbSet = _cotext.Set<T>();
+            _context = context;
+            _dbSet = _context.Set<T>();
         }
         public void Dispose()
         {
-            _cotext?.Dispose();
+            _context?.Dispose();
         }
-        public async Task<T> Find(Expression<Func<T, bool>> expression)
+        public async Task<IEnumerable<T>> Find(Expression<Func<T, bool>> expression)
         {
-            return await _dbSet.Where(expression).FirstOrDefaultAsync();
+            return await _dbSet.AsNoTracking().Where(expression).ToListAsync();
         }
-
+        public async Task<T> FindById(Guid id)
+        {
+            return await _dbSet.FindAsync(id);
+        }
+        public async Task<IEnumerable<T>> GetAll()
+        {
+            return await _dbSet.ToListAsync();
+        }
+        /*public async Task<List<T>> GetAll()
+        {
+            return await _dbSet.ToListAsync();
+        }*/
         public async Task Insert(T entity)
         {
             await _dbSet.AddAsync(entity);
@@ -38,7 +50,7 @@ namespace Infra.Repository
         }
         public async Task<int> SaveChanges()
         {
-            return await _cotext.SaveChangesAsync();
+            return await _context.SaveChangesAsync();
         }
         public async Task Update(T entity)
         {

@@ -1,11 +1,10 @@
-﻿using Domain.Interfaces;
+﻿using Domain.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Domain.Models
+namespace WebApp.ViewModels
 {
-    public abstract class Supplier : Entity, IAggregateRoot
+    public class SupplierViewModel
     {
         public bool Active { get; set; }
         public Email email { get; set; }
